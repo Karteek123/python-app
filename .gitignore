@@ -1,0 +1,8 @@
+*.pyc
+__pycache__/
+.env
+*.log
+.DS_Store
+
+# Large binary files
+argocd-linux-amd64
