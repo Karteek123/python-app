@@ -10,12 +10,14 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    outputs:
+      commit_id: ${{ steps.set-commit-id.outputs.commit_id }}
     steps:
-      
-      - name: Shorten comit id
+      - name: Shorten commit id
+        id: set-commit-id
         shell: bash
         run: |
-          echo "COMMIT_ID=${GITHUB_SHA::6}" >> "$GITHUB_ENV"
+          echo "commit_id=${GITHUB_SHA::6}" >> "$GITHUB_OUTPUT"
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -27,10 +29,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: karteekdagumati/python-app:${{ env.COMMIT_ID }}
-
-    outputs:
-      commit_id: ${{ env.COMMIT_ID }}
+          tags: karteekdagumati/python-app:${{ env.commit_id }}
 
   cd:
     needs: ci
