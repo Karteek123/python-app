@@ -37,12 +37,17 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3 #clone repo
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
 
       - name: Modify values file  #modified the files
         shell: bash
         run: |
           echo "${{ needs.ci.outputs.commit_id }}" 
-          apt-get install -y python3 python3-pip 
           pip install yq
           yq -Yi '.image.tag = "${{needs.ci.outputs.commit_id}}"' charts/python-app/values.yaml
 
